@@ -1,0 +1,38 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool detect(int node , int parent , vector<vector<int>>& adj , vector<int>& vis){
+    vis[node] = 1;
+    for(auto it : adj[node]){
+        if(!vis[it]){
+            if(detect(it , node , adj , vis)) return true;
+        }
+        else if(parent != it){
+            return true;
+        }
+    }
+    return false;
+}
+int main(){
+    int n , m;
+    cin>>n>>m;
+    vector<vector<int>> adj(n);
+    for(int i = 0; i < m; i++){
+        int u , v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> vis(n , 0);
+    bool flag = false;
+    for(int i = 0; i < n; i++){
+        if(!vis[i]){
+            if(detect(i , -1 , adj , vis)){
+                flag = true;
+                break;
+            }
+        }
+    }
+    if(flag) cout<<"Cycle Detected";
+    else cout<<"No Cycle";
+    return 0;
+}
