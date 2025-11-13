@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+using namespace std;
+bool detect(int node , vector<vector<int>>& adj , vector<int>& vis){
+    queue<pair<int , int>> q;
+    q.push({node , -1});
+    vis[node] = 1;     
+    while(!q.empty()){
+        int Node = q.front().first;
+        int par = q.front().second;
+        q.pop();
+        for(auto it : adj[Node]){
+            if(!vis[it]){
+                vis[it] = 1;
+                q.push({it , Node});
+            }
+            else if(it != par) return true;
+        }
+    }
+    return false;
+}
+int main(){
+    int n , m;
+    cin>>n>>m;
+    vector<vector<int>> adj(n);
+    for(int i = 0; i < m; i++){
+        int u , v;
+        cin>>u>>v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+    vector<int> vis(n , 0);
+    bool flag = false;
+    for(int i = 0; i < n; i++){
+        if(!vis[i]){
+            if(detect(i , adj , vis)){
+                flag = true;
+                break;
+            }
+        }
+    }
+    if(flag) cout<<"Cycle Detected";
+    else cout<<"No Cycle";
+    return 0;
+}
